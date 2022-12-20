@@ -1,6 +1,7 @@
 # Created by https://www.toptal.com/developers/gitignore/api/venv,python,visualstudiocode,terraform,dotenv
 # Edit at https://www.toptal.com/developers/gitignore?templates=venv,python,visualstudiocode,terraform,dotenv
 
+*.bkp
 ### dotenv ###
 .env
 

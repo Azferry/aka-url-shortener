@@ -1,16 +1,13 @@
 
-from flask import Flask, jsonify, request
-from flask_restful import Resource, Api
-import os
+from flask import Flask
+from flask_restful import Api
 from os.path import join, dirname
 from dotenv import load_dotenv
 
 ## Restful Resources Imports
 from resources.ShortUrl import ShortUrl
-from resources.Shorten import Shorten
-
-
-
+from resources.siteroot import siteroot
+from resources.CreateUrl import CreateUrl
 
 dotenv_path = join(dirname(__file__), '.env')
 load_dotenv()
@@ -20,16 +17,15 @@ app = Flask(__name__)
 api = Api(app)
 
 """
-V1 Default
+Root Landing
 """
-api.add_resource(ShortUrl, '/v1/<string:urlkey>')
+# api.add_resource(siteroot, '/')
+api.add_resource(ShortUrl, '/<string:shortcode>')
 
 """
-V1 Data
+V1
 """
-# api.add_resource(Shorten, '/shorten')
-api.add_resource(Shorten, '/v1/data/shorten')
-
+api.add_resource(CreateUrl, '/v1/CreateUrl')
 
 
 if __name__ == '__main__':

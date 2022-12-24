@@ -1,0 +1,20 @@
+{
+    "python.pythonPath": "Scripts/python.exe",
+    "files.exclude" : {
+        "**/.git" : true,
+        // "**/.gitignore" : true,
+        "Lib" : true,
+        "lib" : true,
+        "Include" : true,
+        "Scripts" : true,
+        "pyvenv.cfg": true,
+        "**/__pycache__": true
+    },
+    "cSpell.enableFiletypes": [
+        "!python"
+    ],
+    "python.analysis.extraPaths": [
+        "./src/api/data",
+        "./src/api/data"
+    ]
+}

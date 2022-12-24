@@ -5,7 +5,7 @@ from common.UrlOperations import UrlOperations
 parser = reqparse.RequestParser()
 parser.add_argument('url', location='args')
 
-class ShortUrl(Resource):
+class CreateUrl(Resource):
     def __init__(self) -> None:
         self.urlOps = UrlOperations()
         pass
@@ -14,10 +14,10 @@ class ShortUrl(Resource):
         ul = self.urlOps.getLongUrl(shortcode)
         return redirect(ul) #, code=302)
 
-    # def post(self):
-    #     args = parser.parse_args()
-    #     arg1 = str(args['url'])
-    #     shorturl = self.urlOps.createShortUrl(longUrl=arg1)
-    #     response = jsonify(shorturl)
-    #     response.status_code = 201
-    #     return response
+    def post(self):
+        args = parser.parse_args()
+        arg1 = str(args['url'])
+        shorturl = self.urlOps.createShortUrl(longUrl=arg1)
+        response = jsonify(shorturl)
+        response.status_code = 201
+        return response

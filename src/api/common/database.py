@@ -36,8 +36,7 @@ class sqldb_ops():
 
     def exists_shorturl(self, shorturl):
         with self.engine.connect() as con:
-            query = "SELECT (CASE WHEN EXISTS(SELECT 1 FROM [dbo].[short_urls] WITH(NOLOCK) WHERE sub_url = '{}') THEN 1 ELSE 0 END) AS [short_url]".format(shorturl)
-
+            query = "SELECT (CASE WHEN EXISTS(SELECT 1 FROM [dbo].[short_urls] WITH(NOLOCK) WHERE sub_url = '{}' and is_deleted = 0) THEN 1 ELSE 0 END) AS [short_url]".format(shorturl)
             rs = con.execute(query)
             lu = []
             for row in rs:
@@ -49,14 +48,15 @@ class sqldb_ops():
 
     def get_longurl(self, sub_url):
         with self.engine.connect() as con:
-            query = "SELECT Top(1) long_url FROM short_urls where sub_url='{}'".format(sub_url)
+            query = "SELECT Top(1) long_url FROM short_urls where sub_url='{}' and is_deleted = 0".format(sub_url)
 
             rs = con.execute(query)
             lu = []
             for row in rs:
                 lu.append(row)
-
-        return lu[0][0]
+            if len(lu)>0:
+                return lu[0][0]
+        return None
 
 
 

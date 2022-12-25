@@ -5,10 +5,18 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: Current File",
+            "name": "Python: API",
             "type": "python",
             "request": "launch",
-            "program": "${file}",
+            "program": "src/api/app.py",
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "Python: UI",
+            "type": "python",
+            "request": "launch",
+            "program": "src/ui/app.py",
             "console": "integratedTerminal",
             "justMyCode": true
         }

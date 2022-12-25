@@ -21,7 +21,10 @@ class UrlOperations():
         lu = self.url_cache.getKey(sub_url)
         if lu == None:
             lu = self.db_ops.get_longurl(sub_url)
-            self.url_cache.insert(sub_url, lu)
+            if lu != None:
+                self.url_cache.insert(sub_url, lu)
+            else:
+                return None
         if ("https://" or "http://") in lu:
             return lu
         else:

@@ -3,6 +3,7 @@ from flask import Flask
 from flask_restful import Api
 from os.path import join, dirname
 from dotenv import load_dotenv
+from common.sqldb import sqldb_create
 
 ## Restful Resources Imports
 from resources.ShortUrl import ShortUrl
@@ -29,4 +30,5 @@ api.add_resource(CreateUrl, '/v1/CreateUrl')
 
 
 if __name__ == '__main__':
+    sqldb_create()
     app.run(debug = False)

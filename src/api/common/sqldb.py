@@ -94,7 +94,7 @@ class sqldb_create():
     # Fits.secndtble = relationship("secs", order_by = secs.id, back_populates = "fts")
     Base.metadata.create_all(engine)
 
-sqldb_create()
+
 # sqldb_ops().insert_shorturl(long_url='test', url_hash='test',url_vanity='ts')
 # sqldb_ops().insert_shorturl(long_url='test', url_hash='test')
 # sqldb_ops().get_longurl(url_hash='test')

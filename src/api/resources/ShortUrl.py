@@ -12,7 +12,12 @@ class ShortUrl(Resource):
 
     def get(self, shortcode):
         ul = self.urlOps.getLongUrl(shortcode)
+        if ul == None:
+            return
         return redirect(ul) #, code=302)
+
+    def delete(self, shortcode):
+        return
 
     # def post(self):
     #     args = parser.parse_args()

@@ -42,7 +42,7 @@ class UrlOperations():
         hash = hashlib.sha1(value.encode("UTF-8")).hexdigest()
         return hash
 
-    def createShortUrl(self, longUrl, hashlen=6):
+    def createShortUrl(self, longUrl, vaniety=None, hashlen=6):
         """createShortUrl creates a short url give the long url
 
         Args:
@@ -52,15 +52,19 @@ class UrlOperations():
         Returns:
             str: short url string
         """
-        url = longUrl + str(int(time.time()))
-        if "https://" in url:
-            url = longUrl.replace("https://", "")
-        if "http://" in url:
-            url = longUrl.replace("http://", "")
+        if vaniety:
+            shorturl = BASE_URL + '/' + vaniety
+            self.db_ops.insert_shorturl(longUrl, vaniety)
+        else:
+            url = longUrl + str(int(time.time()))
+            if "https://" in url:
+                url = longUrl.replace("https://", "")
+            if "http://" in url:
+                url = longUrl.replace("http://", "")
 
-        url_hash = self.hashfx(url)
-        # ul = self.db_ops.exists_shorturl(url_hash[:hashlen])
-        shorturl = BASE_URL + '/' + url_hash[:hashlen]
-        self.db_ops.insert_shorturl(longUrl, url_hash[:hashlen])
+            url_hash = self.hashfx(url)
+            # ul = self.db_ops.exists_shorturl(url_hash[:hashlen])
+            shorturl = BASE_URL + '/' + url_hash[:hashlen]
+            self.db_ops.insert_shorturl(longUrl, url_hash[:hashlen])
 
         return shorturl

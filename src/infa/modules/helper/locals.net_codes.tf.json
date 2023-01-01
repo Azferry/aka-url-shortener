@@ -1,0 +1,9 @@
+{
+    "locals": {
+        "net_short_codes": {
+            "dce": "d",
+            "xas": "x",
+            "lim": "l"
+        }
+    }
+}

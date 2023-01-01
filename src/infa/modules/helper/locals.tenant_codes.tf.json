@@ -1,0 +1,8 @@
+{
+    "locals": {
+        "tenant_short_codes": {
+            "ntc": "nt",
+            "tst": "ts"
+        }
+    }
+}

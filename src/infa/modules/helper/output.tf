@@ -4,6 +4,17 @@ output "lookup_geo_codes" {
 }
 
 output "lookup_env_codes" {
-    value = local.env_short_codes
+    value = local.environment_short_codes
     description = "List of environment codes and reduced to 1 char"
+}
+
+output "lookup_net_codes" {
+    value = local.network_short_codes
+    description = "List the network short code types"
+}
+
+output "lookup_tenant_codes" {
+    value = local.tenant_short_codes
+    description = "provide 3 char tenant code and returns 2 char tenant code"
+  
 }

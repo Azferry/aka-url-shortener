@@ -1,4 +1,7 @@
 aniso8601==9.0.1
+opencensus
+opencensus-ext-flask
+opencensus-ext-azure
 async-timeout==4.0.2
 certifi==2022.12.7
 charset-normalizer==2.1.1

@@ -25,7 +25,7 @@ variable "network_type" {
 variable "api_webapps" {
   type = object({
     python_version = string
-    tier_type = string
+    tier_type      = string
     webapps = list(
       object({
         enabled = bool
@@ -33,23 +33,43 @@ variable "api_webapps" {
           location = string
           sku      = string
           os_type  = string
-          series = string
+          series   = string
         })
       })
     )
   })
-  default = {
-    python_version = "3.10"
-    tier_type = "string"
-    webapps = [{
-      config = {
-        location = "value"
-        sku      = "value"
-        os_type  = "string"
-        series = "series"
-      }
-      enabled = false
-    }]
-  }
+  description = "Web App Config"
 }
 
+
+variable "sql_db" {
+  type = object({
+    sql_servers = list(object({
+      enabled  = bool
+      series   = string
+      location = string
+      version  = string
+      databases = list(object({
+        name           = string
+        max_size_gb    = number
+        read_scale     = bool
+        sku_name       = string
+        zone_redundant = bool
+        })
+      )
+    }))
+  })
+}
+
+variable "redis" {
+  type = object({
+    redisconfig = list(object({
+      enabled  = bool
+      series   = string
+      location = string
+      sku_name = string
+      capacity  = number
+      family = string
+    }))
+  })
+}

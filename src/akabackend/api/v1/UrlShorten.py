@@ -2,11 +2,12 @@ import uuid
 # import jsonpatch
 from flask import abort, Blueprint, jsonify, request, redirect
 from common.UrlOperations import UrlOperations
+from common.metrics import mmap, short_url_cr_measure,vanity_url_cr_measure, tmap
 app_name = __name__.split(".")[-1]
 app = Blueprint(app_name, app_name)
 
 
-@app.route('/v1/shorten/<string:shortcode>')
+@app.route('/v1/shorten/<string:shortcode>', methods=['GET'])
 def shortenurl(shortcode):
     urlOps = UrlOperations()
     ul = urlOps.getLongUrl(shortcode)
@@ -19,6 +20,8 @@ def create(longurl):
     urlOps = UrlOperations()
     arg1 = str(longurl)
     shorturl = urlOps.createShortUrl(longUrl=arg1)
+    mmap.measure_int_put(short_url_cr_measure, 1)
+    mmap.record(tmap)
     response = jsonify(shorturl)
     response.status_code = 201
     return response
@@ -29,6 +32,8 @@ def createvanity():
     vaniety = request.args.get('vaniety')
     urlOps = UrlOperations()
     shorturl = urlOps.createShortUrl(longUrl=str(longurl), vaniety=str(vaniety))
+    mmap.measure_int_put(vanity_url_cr_measure, 1)
+    mmap.record(tmap)
     response = jsonify(shorturl)
     response.status_code = 201
     return response

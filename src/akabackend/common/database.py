@@ -2,36 +2,54 @@ from sqlalchemy import create_engine, Column, Integer, String, DateTime, Boolean
 from sqlalchemy.ext.declarative import declarative_base
 import urllib
 from sqlalchemy import MetaData
+from common.snowflake import IdWorker
+from common.sqldb import domains, short_urls, sql_conn_helper
 from dotenv import load_dotenv
 import os
-
+from sqlalchemy.orm import sessionmaker
 
 load_dotenv()
 
-# Database
 SQL_DB_SERVER = os.getenv("SQL_DB_SERVER")
-SQL_DB = os.getenv("SQL_DB")
+SQL_DB01 = os.getenv("SQL_DB01")
 SQL_USER = os.getenv("SQL_USER")
 SQL_PWD = os.getenv("SQL_PWD")
+
+SNOW_FLAKE_DC_ID = os.getenv("SNOW_FLAKE_DC_ID", "localhost")
+SNOW_FLAKE_INSTANCE_ID = os.getenv("SNOW_FLAKE_INSTANCE_ID", "localhost")
 
 
 class sqldb_ops():
     def __init__(self) -> None:
-        server = "akadb.database.windows.net"
-        database = "urldb"
-        username = "ntcadmin"
-        password = "MSFTusa!!2020"
-        driver = '{ODBC Driver 17 for SQL Server}'
-        odbc_str = 'DRIVER='+driver+';SERVER='+server+';PORT=1433;UID='+username+';DATABASE='+ database + ';PWD='+ password
-        connect_str = 'mssql+pyodbc:///?odbc_connect=' + urllib.parse.quote_plus(odbc_str)
-        self.engine = create_engine(connect_str)
+        sq = sql_conn_helper(server=SQL_DB_SERVER,userid=SQL_USER,database=SQL_DB01,password=SQL_PWD)
+        self.engine = sq.new_sql_engine()
         self.meta = MetaData(bind=self.engine)
+        self.session = sessionmaker(bind=self.engine)
+        self.worker = IdWorker(worker_id=SNOW_FLAKE_INSTANCE_ID, datacenter_id=SNOW_FLAKE_DC_ID, sequence=0)
         MetaData.reflect(self.meta)
 
     def insert_shorturl(self, long_url, sub_url):
-        short_urls = self.meta.tables['short_urls']
-        statement1 = short_urls.insert().values(long_url=long_url, sub_url=sub_url, owner_id=0, domain_id=0)
-        self.engine.execute(statement1)
+        snow = self.worker.get_id()
+        su = short_urls(long_url=long_url, sub_url=sub_url, snowflake_id=snow)
+        s = self.session()
+        s.add(su)
+        s.commit()
+        s.close()
+        return
+
+    # def insert_shorturl(self, long_url, sub_url):
+    #     short_urls = self.meta.tables['short_urls']
+    #     snow = self.worker.get_id()
+    #     statement1 = short_urls.insert().values(snowflake_id=int(snow),long_url=long_url, sub_url=sub_url, owner_id=0, domain_id=0)
+    #     self.engine.execute(statement1)
+    #     return
+
+    def insert_domain(self, domain_name):
+        s = self.session()
+        dn = domains(domain_name)
+        s.add(dn)
+        s.commit()
+        s.close()
         return
 
     def exists_shorturl(self, shorturl):
@@ -57,30 +75,3 @@ class sqldb_ops():
             if len(lu)>0:
                 return lu[0][0]
         return None
-
-
-
-# class database():
-#     def __init__(self) -> None:
-#         pass
-
-#     def get_shorturl(hashKey):
-#         return NotImplemented
-
-#     def get_vanityurl(vanityKey):
-#         return NotImplemented
-
-#     def add_shorturl(hashKey, userId):
-#         return NotImplemented
-
-#     def add_vanityurl(hashKey, vanityName, userId):
-#         return NotImplemented
-
-#     def check_hash_exists(hashKey):
-#         return NotImplemented
-
-#     def check_vanity_exists(vanityKey):
-#         return NotImplemented
-
-#     def add_metric(url_id, operationName="hitcount"):
-#         return NotImplemented

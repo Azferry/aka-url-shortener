@@ -30,6 +30,7 @@ locals {
 
 /* Get Current Subscription */
 data "azurerm_subscription" "current" {}
+data "azurerm_client_config" "current" {}
 
 /* Resource Groups */
 locals {
@@ -46,13 +47,12 @@ locals {
   }
 }
 
-/* App Insights */
+
+/* shared_services */
 locals {
-    app_insights_location = "eastus2"
-    appinsight_retention = 60
-    app_insights_rg = local.az_resource_groups[local.app_insights_location].name
-    law_name = "${local.tenant_prefix}-${local.network_type}-${local.application_label}-${local.lookup_geo_codes[lower(local.app_insights_location)]}-${local.environment_short}-log01"
-    appi_name = "${local.tenant_prefix}-${local.network_type}-${local.application_label}-${local.lookup_geo_codes[lower(local.app_insights_location)]}-${local.environment_short}-appi01"
+  shared_srv_location = "eastus2"
+  shared_srv_rg = local.az_resource_groups[local.shared_srv_location].name
+  prefix_name = "${local.tenant_prefix}-${local.network_type}-${local.application_label}-${local.lookup_geo_codes[lower(local.shared_srv_location)]}-${local.environment_short}"
 }
 
 /* API Web Apps */
@@ -83,6 +83,7 @@ locals {
   az_webapps = {
     for i in local.webapps : i.asp_prefix_name => i
   }
+
 }
 # asp, fa, wa
 
@@ -127,6 +128,8 @@ locals {
         rg_name   = local.az_resource_groups[a.location].name
         server_id = "${data.azurerm_subscription.current.id}/resourceGroups/${local.az_resource_groups[a.location].name}/providers/Microsoft.Sql/servers/${local.tenant_prefix}-${local.network_type}-${local.application_label}-${local.lookup_geo_codes[lower(a.location)]}-${local.environment_short}-sql${a.series}"
         tags      = merge(local.base_module_tags, { LocationShort = local.lookup_geo_codes[lower(a.location)] })
+        username = "NTCAdmin"
+        password = "MSFTusa!!2020"
       }
     ]
   ])
@@ -155,6 +158,39 @@ locals {
   az_sql_databases = {
     for i in local.sql_dbs_flatten : i.sql_server_name => i
   }
+}
+# @Microsoft.KeyVault(VaultName=myvault;SecretName=mysecret)
+
+/* KV Secrets */
+locals {
+  kv_id = "${data.azurerm_subscription.current.id}/resourceGroups/ntc-xas-akau-eus2-n-rg01/providers/Microsoft.KeyVault/vaults/ntc-xas-akau-eus2-n-kv01"
+  kv_secrets_sql_host = {
+    for i in local.az_sql_servers : "${i.name}host" => {
+        key_name = "${i.name}-host"
+        value = "${i.name}.database.windows.net"
+        key_vault_id = local.kv_id
+    }
+  }
+
+  kv_secrets_sql_user = {
+    for i in local.az_sql_servers : "${i.name}usr" => {
+        key_name = "${i.name}-usr"
+        value = i.username
+        key_vault_id = local.kv_id
+    }
+  }
+
+  kv_secrets_sql_pw = {
+    for i in local.az_sql_servers : "${i.name}pw" => {
+        key_name = "${i.name}-pw"
+        value = i.password
+        key_vault_id = local.kv_id
+    }
+  }
+
+  az_key_vault_secrets = merge(local.kv_secrets_sql_host, 
+                                local.kv_secrets_sql_user,
+                                local.kv_secrets_sql_pw)
 }
 
 locals {
@@ -186,6 +222,10 @@ locals {
     # sql_dbs_flatten = local.sql_dbs_flatten
     # az_sql_servers = local.az_sql_servers
     # az_sql_databases = local.az_sql_databases
+
+    /* Key Vault Keys */
+    # kv_secrets_sql_host = local.kv_secrets_sql_host
+    # az_key_vault_secrets = local.az_key_vault_secrets
   }
 }
 output "DEBUG" {

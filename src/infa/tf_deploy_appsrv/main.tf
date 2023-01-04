@@ -13,13 +13,21 @@ resource "azurerm_resource_group" "rg" {
 }
 
 
+module "shared_services" {
+    source = "../modules/shared_services"
+    location = local.shared_srv_location
+    resource_group_name = local.shared_srv_rg
+    prefix_name = local.prefix_name
+    # Add Tags
+}
+
 module "webapps" {
   source   = "../modules/webapp"
   for_each = local.az_webapps
   webapp   = each.value
-
+  log_analytics_id = module.shared_services.log_workspace_id
   depends_on = [
-    azurerm_resource_group.rg
+    azurerm_resource_group.rg,
   ]
 }
 
@@ -29,11 +37,25 @@ resource "azurerm_mssql_server" "sql" {
   resource_group_name          = each.value.rg_name
   location                     = each.value.location
   version                      = each.value.version
-  administrator_login          = "NTCAdmin"
-  administrator_login_password = "MSFTusa!!2020"
+  administrator_login          = each.value.username
+  administrator_login_password = each.value.password
   tags                         = each.value.tags
+
+  identity {
+    type = "SystemAssigned"
+  }
   depends_on = [
     azurerm_resource_group.rg
+  ]
+}
+
+resource "azurerm_key_vault_secret" "kv_secrets" {
+    for_each = local.az_key_vault_secrets
+  name         = each.value.key_name
+  value        = each.value.value
+  key_vault_id = module.shared_services.key_vault_id
+  depends_on = [
+    module.shared_services
   ]
 }
 
@@ -70,18 +92,22 @@ resource "azurerm_redis_cache" "redis" {
   }
 }
 
-resource "azurerm_log_analytics_workspace" "appin" {
-  name                = local.law_name
-  location            = local.app_insights_location
-  resource_group_name = local.app_insights_rg
-  sku                 = "PerGB2018"
-  retention_in_days   = local.appinsight_retention
+resource "azurerm_key_vault_secret" "redis_host" {
+    for_each = azurerm_redis_cache.redis
+  name         = "${each.value.name}-host"
+  value        = each.value.hostname
+  key_vault_id = module.shared_services.key_vault_id
+  depends_on = [
+    azurerm_redis_cache.redis
+  ]
 }
 
-resource "azurerm_application_insights" "appin" {
-  name                = local.appi_name
-  location            = local.app_insights_location
-  resource_group_name = local.app_insights_rg
-  workspace_id        = azurerm_log_analytics_workspace.appin.id
-  application_type    = "web"
+resource "azurerm_key_vault_secret" "redis_key" {
+    for_each = azurerm_redis_cache.redis
+  name         = "${each.value.name}-key"
+  value        = each.value.primary_access_key
+  key_vault_id = module.shared_services.key_vault_id
+  depends_on = [
+    azurerm_redis_cache.redis
+  ]
 }

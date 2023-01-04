@@ -11,3 +11,7 @@ variable "webapp" {
     rg_name = string
   })
 }
+
+variable "log_analytics_id" {
+  type = string
+}

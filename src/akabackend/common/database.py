@@ -15,18 +15,21 @@ SQL_DB01 = os.getenv("SQL_DB01")
 SQL_USER = os.getenv("SQL_USER")
 SQL_PWD = os.getenv("SQL_PWD")
 
-SNOW_FLAKE_DC_ID = os.getenv("SNOW_FLAKE_DC_ID", "localhost")
-SNOW_FLAKE_INSTANCE_ID = os.getenv("SNOW_FLAKE_INSTANCE_ID", "localhost")
+SNOW_FLAKE_DC_ID = os.getenv("DATACENTER_ID", "localhost")
+if os.getenv("HOST_TYPE", "localhost").lower() == "azwebapp":
+    SNOW_FLAKE_INSTANCE_ID = os.getenv("WEBSITE_INSTANCE_ID")#, "localhost")
+else:
+    SNOW_FLAKE_INSTANCE_ID = os.getenv("INSTANCE_ID", "localhost")
 
 
 class sqldb_ops():
     def __init__(self) -> None:
         sq = sql_conn_helper(server=SQL_DB_SERVER,userid=SQL_USER,database=SQL_DB01,password=SQL_PWD)
         self.engine = sq.new_sql_engine()
-        self.meta = MetaData(bind=self.engine)
+        # self.meta = MetaData(bind=self.engine)
         self.session = sessionmaker(bind=self.engine)
         self.worker = IdWorker(worker_id=SNOW_FLAKE_INSTANCE_ID, datacenter_id=SNOW_FLAKE_DC_ID, sequence=0)
-        MetaData.reflect(self.meta)
+        # MetaData.reflect(self.meta)
 
     def insert_shorturl(self, long_url, sub_url):
         snow = self.worker.get_id()

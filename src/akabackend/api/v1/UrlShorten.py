@@ -1,5 +1,3 @@
-import uuid
-# import jsonpatch
 from flask import abort, Blueprint, jsonify, request, redirect
 from common.UrlOperations import UrlOperations
 from common.metrics import mmap, short_url_cr_measure,vanity_url_cr_measure, tmap

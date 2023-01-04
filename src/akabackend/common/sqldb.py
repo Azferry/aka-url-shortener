@@ -2,7 +2,6 @@
 import os
 from sqlalchemy import create_engine, Column, Integer, String, DateTime, Boolean, text, BigInteger, and_
 from sqlalchemy.ext.declarative import declarative_base
-# from flask_sqlalchemy import SQLAlchemy
 import urllib
 from sqlalchemy import MetaData
 from dotenv import load_dotenv
@@ -129,13 +128,3 @@ class users(Base):
 #     invid = Column(Integer, ForeignKey('test3.id'))
 #     fts = relationship("Fits", back_populates = "secndtble")
 # Fits.secndtble = relationship("secs", order_by = secs.id, back_populates = "fts")
-
-# from sqlalchemy.orm import scoped_session, sessionmaker, backref, relation
-
-# db = sessionmaker(bind=engine)
-# # Base.query = db.query_property()
-# dn = domains("He")
-# # base..add(dn)
-# db.commit()
-
-# Base.

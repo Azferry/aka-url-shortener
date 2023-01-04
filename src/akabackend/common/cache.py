@@ -27,17 +27,3 @@ class cache():
         if v:
             return v.decode("utf-8")
         return None
-
-
-
-
-
-# app_cache = cache(db_id=0)
-# url_cache = cache(db_id=1)
-
-# url_cache.insert('key1', "value")
-# print(url_cache.getKey('key1'))
-# u = url_cache.getKey('key')
-# print(u)
-# app_cache.insert('key1', "value")
-# print(app_cache.getKey('key1'))

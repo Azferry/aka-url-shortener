@@ -13,7 +13,6 @@ from opencensus.ext.azure import metrics_exporter
 
 
 def create_app(config_class=Config):
-    # sqldb_create()
     init_db()
     app = Flask(__name__)
     logger = logging.getLogger(__name__)

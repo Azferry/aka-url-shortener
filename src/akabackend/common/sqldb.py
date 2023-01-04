@@ -1,6 +1,6 @@
 
 import os
-from sqlalchemy import create_engine, Column, Integer, String, DateTime, Boolean, text, BigInteger
+from sqlalchemy import create_engine, Column, Integer, String, DateTime, Boolean, text, BigInteger, and_
 from sqlalchemy.ext.declarative import declarative_base
 # from flask_sqlalchemy import SQLAlchemy
 import urllib
@@ -62,11 +62,6 @@ Base = declarative_base()
 def init_db():
     Base.metadata.create_all(engine)
     return
-# class sqldb_create():
-#     sq = sql_conn_helper(server=SQL_DB_SERVER,userid=SQL_USER,database=SQL_DB01,password=SQL_PWD)
-#     engine = sq.new_sql_engine()
-
-#     Base = declarative_base()
 
 class short_urls(Base):
     __tablename__ = 'short_urls'
@@ -84,6 +79,24 @@ class short_urls(Base):
         self.sub_url = sub_url
         self.domain_id = domain_id
         self.owner_id = owner_id
+    
+    def to_json(self):
+        return dict(snowflake_id=self.snowflake_id,
+                    long_url=self.long_url, 
+                    sub_url=self.sub_url,
+                    domain_id = self.domain_id,
+                    owner_id = self.owner_id,
+                    create_date = self.create_date,
+                    is_deleted = self.is_deleted)
+    def __repr__(self):
+        return f'<short_urls {self.sub_url}>'
+
+    # def __eq__(self, other):
+    #     return type(self) is type(other) and self.snowflake_id == other.snowflake_id
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
 
 
 class domains(Base):

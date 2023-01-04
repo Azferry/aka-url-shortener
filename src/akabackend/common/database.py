@@ -37,11 +37,13 @@ class sqldb_ops():
         s.close()
         return
 
-    # def insert_shorturl(self, long_url, sub_url):
-    #     short_urls = self.meta.tables['short_urls']
-    #     snow = self.worker.get_id()
-    #     statement1 = short_urls.insert().values(snowflake_id=int(snow),long_url=long_url, sub_url=sub_url, owner_id=0, domain_id=0)
-    #     self.engine.execute(statement1)
+    # def delete_shorturl(self, domain_name):
+    #     s = self.session()
+    #     dn = domains(domain_name)
+    #     r  = s.query(short_urls).filter(short_urls.sub_url==sub_url).first()
+    #     s.add(dn)
+    #     s.commit()
+    #     s.close()
     #     return
 
     def insert_domain(self, domain_name):
@@ -63,15 +65,27 @@ class sqldb_ops():
                 return True
         return False
 
-
     def get_longurl(self, sub_url):
-        with self.engine.connect() as con:
-            query = "SELECT Top(1) long_url FROM short_urls where sub_url='{}' and is_deleted = 0".format(sub_url)
+        """get_longurl given the sub url return the long url.
 
-            rs = con.execute(query)
-            lu = []
-            for row in rs:
-                lu.append(row)
-            if len(lu)>0:
-                return lu[0][0]
-        return None
+        Args:
+            sub_url (str): sub url key
+
+        Returns:
+            str: returns only the first entry found or none
+        """
+        s = self.session()
+        r  = s.query(short_urls).filter(short_urls.sub_url==sub_url).first()
+        # so = short_urls(snowflake_id=r.snowflake_id,
+        #                 long_url=r.long_url, 
+        #                 sub_url=r.sub_url,
+        #                 domain_id=r.domain_id,
+        #                 owner_id=r.owner_id
+        #                 )
+        # .all()
+        # print(query)
+        # for r in query:
+        #     print("\n", r.long_url)
+        s.close()
+        return r
+        # session.query(User).filter(User.id == 1)

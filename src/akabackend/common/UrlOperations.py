@@ -4,6 +4,7 @@ from os.path import join, dirname
 from dotenv import load_dotenv
 from common.database import sqldb_ops
 from common.cache import cache
+import common.utils as util
 import time
 
 load_dotenv()
@@ -19,16 +20,17 @@ class UrlOperations():
 
     def getLongUrl(self, sub_url):
         lu = self.url_cache.getKey(sub_url)
+        longurl = lu
         if lu == None:
             lu = self.db_ops.get_longurl(sub_url)
-            if lu != None:
-                self.url_cache.insert(sub_url, lu)
-            else:
+            longurl = lu.long_url
+            if lu == None:
                 return None
-        if ("https://" or "http://") in lu:
-            return lu
+            self.url_cache.insert(sub_url, lu.long_url)
+        if ("https://" or "http://") in longurl:
+            return longurl
         else:
-            return ("https://" + lu)
+            return ("https://" + longurl)
 
     def hashfx(self, value):
         """hashfx Generate hash from string value
@@ -52,16 +54,14 @@ class UrlOperations():
         Returns:
             str: short url string
         """
+        check = util.check_valid_url(longUrl)
+        if check == False: 
+            return
         if vaniety:
             shorturl = BASE_URL + '/' + vaniety
             self.db_ops.insert_shorturl(longUrl, vaniety)
         else:
             url = longUrl + str(int(time.time()))
-            if "https://" in url:
-                url = longUrl.replace("https://", "")
-            if "http://" in url:
-                url = longUrl.replace("http://", "")
-
             url_hash = self.hashfx(url)
             # ul = self.db_ops.exists_shorturl(url_hash[:hashlen])
             shorturl = BASE_URL + '/' + url_hash[:hashlen]

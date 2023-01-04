@@ -31,7 +31,7 @@ def createvanity():
     longurl = request.args.get('longurl')
     vaniety = request.args.get('vaniety')
     urlOps = UrlOperations()
-    shorturl = urlOps.createShortUrl(longUrl=str(longurl), vaniety=str(vaniety))
+    shorturl = urlOps.createShortUrl(longUrl=longurl, vaniety=str(vaniety))
     mmap.measure_int_put(vanity_url_cr_measure, 1)
     mmap.record(tmap)
     response = jsonify(shorturl)

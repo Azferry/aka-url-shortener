@@ -1,4 +1,3 @@
-
 import time
 import re
 import hashlib
@@ -112,18 +111,3 @@ class IdWorker(object):
         while timestamp <= last_timestamp:
             timestamp = self._gen_timestamp()
         return timestamp
-
-
-# if __name__ == '__main__':
-#     import datetime
-#     # instanceid = "6d016e86bc41ff8e2fcf5d66da0116e929b41609a8cace17b40b6c5e4eb15b44"
-#     instanceid = "localhost"
-#     worker = IdWorker(worker_id=instanceid, datacenter_id="SouthCentralUs", sequence=0)
-#     ids = []
-#     start = datetime.datetime.now()
-#     for i in range(1000):
-#         new_id = worker.get_id()
-#         ids.append(new_id)
-#     end = datetime.datetime.now()
-#     spend_time = end - start
-#     print(spend_time, len(ids), len(set(ids)))

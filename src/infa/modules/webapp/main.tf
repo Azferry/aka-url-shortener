@@ -14,10 +14,31 @@ resource "azurerm_linux_web_app" "wa" {
 
   site_config {}
 
+  app_settings = var.app_settings
+
+
+  identity {
+    type = "SystemAssigned"
+  }
+
   depends_on = [
     azurerm_service_plan.wa
   ]
 }
+
+resource "azurerm_key_vault_access_policy" "wa" {
+  key_vault_id = var.key_vault_id
+  tenant_id    = azurerm_linux_web_app.wa.identity[0].tenant_id
+  object_id = azurerm_linux_web_app.wa.identity[0].principal_id
+
+  secret_permissions = [
+    "Get",
+  ]
+  depends_on = [
+    azurerm_linux_web_app.wa
+  ]
+}
+
 
 resource "azurerm_monitor_diagnostic_setting" "diag" {
   name               = "la_diag_settings"

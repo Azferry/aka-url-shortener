@@ -1,7 +1,8 @@
-from sqlalchemy import create_engine, Column, Integer, String, DateTime, Boolean, text
+from sqlalchemy import create_engine, Column, Integer, String, DateTime, Boolean, text, delete
+import datetime
 from sqlalchemy.ext.declarative import declarative_base
 import urllib
-from sqlalchemy import MetaData
+from sqlalchemy import MetaData, Table
 from common.snowflake import IdWorker
 from common.sqldb import domains, short_urls, sql_conn_helper
 from dotenv import load_dotenv
@@ -26,10 +27,11 @@ class sqldb_ops():
     def __init__(self) -> None:
         sq = sql_conn_helper(server=SQL_DB_SERVER,userid=SQL_USER,database=SQL_DB01,password=SQL_PWD)
         self.engine = sq.new_sql_engine()
-        # self.meta = MetaData(bind=self.engine)
+        self.meta = MetaData(bind=self.engine)
         self.session = sessionmaker(bind=self.engine)
         self.worker = IdWorker(worker_id=SNOW_FLAKE_INSTANCE_ID, datacenter_id=SNOW_FLAKE_DC_ID, sequence=0)
-        # MetaData.reflect(self.meta)
+        MetaData.reflect(self.meta)
+        self.delete_shorturl('ap')
 
     def insert_shorturl(self, long_url, sub_url):
         snow = self.worker.get_id()
@@ -40,14 +42,15 @@ class sqldb_ops():
         s.close()
         return
 
-    # def delete_shorturl(self, domain_name):
-    #     s = self.session()
-    #     dn = domains(domain_name)
-    #     r  = s.query(short_urls).filter(short_urls.sub_url==sub_url).first()
-    #     s.add(dn)
-    #     s.commit()
-    #     s.close()
-    #     return
+    def delete_shorturl(self, sub_url):
+        s = self.session()
+        s.query(short_urls).\
+            filter(short_urls.sub_url == sub_url ).\
+            update({'is_deleted': True, 'delete_date': datetime.datetime.now()})
+        s.flush()
+        s.commit()
+        s.close()
+        return
 
     def insert_domain(self, domain_name):
         s = self.session()
@@ -79,16 +82,6 @@ class sqldb_ops():
         """
         s = self.session()
         r  = s.query(short_urls).filter(short_urls.sub_url==sub_url).first()
-        # so = short_urls(snowflake_id=r.snowflake_id,
-        #                 long_url=r.long_url, 
-        #                 sub_url=r.sub_url,
-        #                 domain_id=r.domain_id,
-        #                 owner_id=r.owner_id
-        #                 )
-        # .all()
-        # print(query)
-        # for r in query:
-        #     print("\n", r.long_url)
         s.close()
         return r
         # session.query(User).filter(User.id == 1)

@@ -15,3 +15,12 @@ variable "webapp" {
 variable "log_analytics_id" {
   type = string
 }
+
+variable "key_vault_id" {
+  type = string
+}
+
+variable "app_settings" {
+  type = any
+  default = {}
+}

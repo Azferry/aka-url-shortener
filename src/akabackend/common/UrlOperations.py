@@ -17,6 +17,12 @@ class UrlOperations():
         self.db_ops = sqldb_ops()
         self.url_cache = cache(db_id=1)
         pass
+    
+    def checkIfShortUrlExists(self, short_key):
+        ch = self.db_ops.exists_shorturl(short_key)
+        if ch:
+            return True
+        return False
 
     def getLongUrl(self, sub_url):
         lu = self.url_cache.getKey(sub_url)

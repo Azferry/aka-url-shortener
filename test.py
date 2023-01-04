@@ -150,6 +150,7 @@ import validators
 url='https://microsoft-my.sharepoint.com/:w:/p/ryanferry/EeXUlRrL_llDh2YrAaJ6tjUBMOBEe20dchuVUXPtSKZ1Tg?e=aJnhKs'
 print(validators.url("http://google.com"))
 print(validators.url(url))
+print(validators.url("https://www.google.com"))
 # def check_valid_url(url):
 #     try:
 #         status_code = urllib.request.urlopen(url).getcode()

@@ -26,8 +26,16 @@ module "webapps" {
   for_each = local.az_webapps
   webapp   = each.value
   log_analytics_id = module.shared_services.log_workspace_id
+  key_vault_id = module.shared_services.key_vault_id
+  app_settings = {
+    HOST_TYPE = "AzWebApp"
+    DATACENTER_ID = "WUS2"
+    APPINSIGHTS_CONNSTR = "@Microsoft.KeyVault(SecretUri=https://ntc-xas-akau-eus2-n-kv01.vault.azure.net/secrets/application-insights-connstr)"    
+  
+  }
   depends_on = [
     azurerm_resource_group.rg,
+    module.shared_services
   ]
 }
 

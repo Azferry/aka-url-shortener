@@ -1,9 +1,8 @@
 
 import os
-from sqlalchemy import create_engine, Column, Integer, String, DateTime, Boolean, text, BigInteger, and_
+from sqlalchemy import create_engine, Column, Integer, String, DateTime, Boolean, text, BigInteger, and_, MetaData
 from sqlalchemy.ext.declarative import declarative_base
 import urllib
-from sqlalchemy import MetaData
 # from dotenv import load_dotenv
 # load_dotenv()
 SQL_DB_SERVER = os.getenv("SQL_DB_SERVER")

@@ -1,8 +1,5 @@
-from sqlalchemy import create_engine, Column, Integer, String, DateTime, Boolean, text, delete
 import datetime
-from sqlalchemy.ext.declarative import declarative_base
-import urllib
-from sqlalchemy import MetaData, Table
+from sqlalchemy import MetaData
 from common.snowflake import IdWorker
 from common.sqldb import domains, short_urls, sql_conn_helper
 # from dotenv import load_dotenv

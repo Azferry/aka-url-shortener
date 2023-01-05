@@ -40,9 +40,9 @@ def create_app(config_class=Config):
 
     return app
 
-if __name__ == '__main__':
-    app = create_app()
-    app.run()
+# if __name__ == '__main__':
+    # app = create_app()
+    # app.run()
     # if app.config["HOST_TYPE"].lower() == "azwebapp":
     #     app.run(host='0.0.0.0',port=5000)
     # else:
@@ -52,3 +52,5 @@ if __name__ == '__main__':
 
 # To run Flask under uWSGI in a Docker environment, you must first add lazy-apps = true to the uWSGI configuration file 
 # (uwsgi.ini). For more information, see the issue description.
+app = create_app()
+app.run()

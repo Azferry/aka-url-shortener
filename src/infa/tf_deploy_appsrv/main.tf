@@ -41,6 +41,7 @@ module "webapps" {
     REDIS_PORT = 6380
     REDIS_DEFAULT_TTL = 8000
     BASE_URL = "aka.ntc.com"
+    SCM_DO_BUILD_DURING_DEPLOYMENT = true
   }
   depends_on = [
     azurerm_resource_group.rg,

@@ -63,5 +63,5 @@ jobs:
         with:
           name: python-app
           path: |
-            .
+            ${{ env.SRC_PATH }}
             !venv/

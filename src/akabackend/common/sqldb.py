@@ -3,8 +3,8 @@ import os
 from sqlalchemy import create_engine, Column, Integer, String, DateTime, Boolean, text, BigInteger, and_, MetaData
 from sqlalchemy.ext.declarative import declarative_base
 import urllib
-# from dotenv import load_dotenv
-# load_dotenv()
+from dotenv import load_dotenv
+load_dotenv()
 SQL_DB_SERVER = os.getenv("SQL_DB_SERVER")
 SQL_USER = os.getenv("SQL_USER")
 SQL_PWD = os.getenv("SQL_PWD")
@@ -70,7 +70,7 @@ class short_urls(Base):
     owner_id = Column(BigInteger)
     create_date = Column(DateTime, server_default=text('GETDATE()'))
     is_deleted = Column(Boolean, server_default=text('0'))
-    # delete_date = Column(DateTime)
+    delete_date = Column(DateTime)
 
     def __init__(self, snowflake_id, long_url, sub_url, domain_id=0, owner_id=0):
         self.snowflake_id = snowflake_id

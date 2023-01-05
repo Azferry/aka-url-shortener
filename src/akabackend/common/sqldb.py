@@ -4,8 +4,8 @@ from sqlalchemy import create_engine, Column, Integer, String, DateTime, Boolean
 from sqlalchemy.ext.declarative import declarative_base
 import urllib
 from sqlalchemy import MetaData
-from dotenv import load_dotenv
-load_dotenv()
+# from dotenv import load_dotenv
+# load_dotenv()
 SQL_DB_SERVER = os.getenv("SQL_DB_SERVER")
 SQL_USER = os.getenv("SQL_USER")
 SQL_PWD = os.getenv("SQL_PWD")

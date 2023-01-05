@@ -5,11 +5,11 @@ import urllib
 from sqlalchemy import MetaData, Table
 from common.snowflake import IdWorker
 from common.sqldb import domains, short_urls, sql_conn_helper
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 import os
 from sqlalchemy.orm import sessionmaker
 
-load_dotenv()
+# load_dotenv()
 
 SQL_DB_SERVER = os.getenv("SQL_DB_SERVER")
 SQL_DB01 = os.getenv("SQL_DB01")

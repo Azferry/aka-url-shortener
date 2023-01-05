@@ -71,7 +71,7 @@ class short_urls(Base):
     owner_id = Column(BigInteger)
     create_date = Column(DateTime, server_default=text('GETDATE()'))
     is_deleted = Column(Boolean, server_default=text('0'))
-    delete_date = Column(DateTime)
+    # delete_date = Column(DateTime)
 
     def __init__(self, snowflake_id, long_url, sub_url, domain_id=0, owner_id=0):
         self.snowflake_id = snowflake_id

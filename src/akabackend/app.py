@@ -45,7 +45,7 @@ def create_app(config_class=Config):
 if __name__ == '__main__':
     app = create_app()
     if app.config["HOST_TYPE"].lower() == "azwebapp":
-        app.run()
+        app.run(host='0.0.0.0',port=5000)
     else:
         PORT = int(os.getenv('PORT', 5000))
         app.run(port=PORT, threaded=True)

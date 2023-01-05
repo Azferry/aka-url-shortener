@@ -18,6 +18,7 @@ module "shared_services" {
     location = local.shared_srv_location
     resource_group_name = local.shared_srv_rg
     prefix_name = local.prefix_name
+    tenant_id = data.azurerm_client_config.current.tenant_id
     # Add Tags
 }
 
@@ -30,8 +31,16 @@ module "webapps" {
   app_settings = {
     HOST_TYPE = "AzWebApp"
     DATACENTER_ID = "WUS2"
-    APPINSIGHTS_CONNSTR = "@Microsoft.KeyVault(SecretUri=https://ntc-xas-akau-eus2-n-kv01.vault.azure.net/secrets/application-insights-connstr)"    
-  
+    APPINSIGHTS_CONNSTR = "@Microsoft.KeyVault(SecretUri=https://ntc-xas-akau-eus2-n-kv01.vault.azure.net/secrets/application-insights-connstr)" 
+    SQL_PWD = "@Microsoft.KeyVault(SecretUri=https://ntc-xas-akau-eus2-n-kv01.vault.azure.net/secrets/ntc-xas-akau-eus2-n-sql01-pw)"   
+    SQL_DB_SERVER = "ntc-xas-akau-eus2-n-sql01.database.windows.net"
+    SQL_DB01 = "shorturl-eus2-sqldb01"
+    SQL_USER = "NTCAdmin"
+    REDIS_PASS = "@Microsoft.KeyVault(SecretUri=https://ntc-xas-akau-eus2-n-kv01.vault.azure.net/secrets/ntc-xas-akau-eus2-n-redis01-key)" 
+    REDIS_HOST  = "@Microsoft.KeyVault(SecretUri=https://ntc-xas-akau-eus2-n-kv01.vault.azure.net/secrets/ntc-xas-akau-eus2-n-redis01-host)"
+    REDIS_PORT = 6380
+    REDIS_DEFAULT_TTL = 8000
+    BASE_URL = "aka.ntc.com"
   }
   depends_on = [
     azurerm_resource_group.rg,
@@ -67,6 +76,27 @@ resource "azurerm_key_vault_secret" "kv_secrets" {
   ]
 }
 
+resource "azurerm_key_vault_access_policy" "wa" {
+  key_vault_id = module.shared_services.key_vault_id
+    tenant_id = data.azurerm_client_config.current.tenant_id
+    object_id = data.azurerm_client_config.current.object_id
+  key_permissions = [
+      "Get",
+  ]
+
+  secret_permissions = [
+      "Set",
+      "Get",
+      "List",
+      "Delete",
+      "Purge",
+      "Recover"
+  ]
+  depends_on = [
+    module.shared_services
+  ]
+}
+
 resource "azurerm_mssql_database" "sql" {
   for_each       = local.az_sql_databases
   name           = each.value.name
@@ -81,6 +111,7 @@ resource "azurerm_mssql_database" "sql" {
   tags = each.value.tags
   depends_on = [
     azurerm_mssql_server.sql,
+    module.shared_services,
     azurerm_resource_group.rg
   ]
 }
@@ -98,6 +129,9 @@ resource "azurerm_redis_cache" "redis" {
 
   redis_configuration {
   }
+  depends_on = [
+    module.shared_services
+  ]
 }
 
 resource "azurerm_key_vault_secret" "redis_host" {

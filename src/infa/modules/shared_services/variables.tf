@@ -9,3 +9,7 @@ variable "resource_group_name" {
 variable "prefix_name" {
   type = string
 }
+
+variable "tenant_id" {
+  type = string
+}

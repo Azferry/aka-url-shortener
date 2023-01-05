@@ -12,7 +12,11 @@ resource "azurerm_linux_web_app" "wa" {
   location            = var.webapp.location
   service_plan_id     = azurerm_service_plan.wa.id
 
-  site_config {}
+  site_config {
+    application_stack {
+      python_version = "3.10"
+    }
+  }
 
   app_settings = var.app_settings
 

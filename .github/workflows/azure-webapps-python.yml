@@ -46,7 +46,7 @@ jobs:
           name: python-app
           path: |
             ${{ env.SRC_PATH }}
-      # !venv/
+            !venv/
             
   deploy:
     permissions:

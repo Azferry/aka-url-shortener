@@ -36,7 +36,7 @@ pycparser==2.21
 PyJWT==2.6.0
 pyodbc==4.0.35
 python-dotenv==0.21.0
-pywin32==305
+# pywin32==305
 redis==4.4.0
 requests==2.28.1
 rsa==4.9

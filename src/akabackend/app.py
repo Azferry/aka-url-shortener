@@ -11,7 +11,7 @@ from opencensus.ext.azure import metrics_exporter
 
 
 def create_app(config_class=Config):
-    init_db()
+    # init_db()
     app = Flask(__name__)
     logger = logging.getLogger(__name__)
     logger.addHandler(AzureLogHandler(connection_string=Config.APPINSIGHTS_CONNSTR))

@@ -53,4 +53,5 @@ def create_app(config_class=Config):
 # To run Flask under uWSGI in a Docker environment, you must first add lazy-apps = true to the uWSGI configuration file 
 # (uwsgi.ini). For more information, see the issue description.
 app = create_app()
-app.run(host='0.0.0.0', port=8000)
+# app.run(host='0.0.0.0', port=8000)
+app.run()

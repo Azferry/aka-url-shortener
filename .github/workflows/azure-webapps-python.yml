@@ -2,7 +2,7 @@
 name: Build and deploy Python app to Azure Web App
 
 env:
-  PYTHON_VERSION: '3.8'              # set this to the Python version to use
+  PYTHON_VERSION: '3.10'              # set this to the Python version to use
   SRC_PATH: './src/akabackend'
   AZURE_WEBAPP_NAME: 'ntc-xas-akau-eus2-n-wa01-api'
 

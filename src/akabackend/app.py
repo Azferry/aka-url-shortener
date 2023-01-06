@@ -35,6 +35,10 @@ def create_app(config_class=Config):
 
     middleware.exporter.add_telemetry_processor(callback_function)
 
+    @app.route('/')
+    def heart_beat():
+        return 'Hello World, Heart Beat - Root App'
+
     import api
     api.init_app(app, version=__version__, title=Config.APP_TITLE)
 

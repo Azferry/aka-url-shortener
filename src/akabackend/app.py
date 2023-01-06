@@ -16,7 +16,7 @@ def create_app(config_class=Config):
     logger = logging.getLogger(__name__)
     logger.addHandler(AzureLogHandler(connection_string=Config.APPINSIGHTS_CONNSTR))
     
-    app.config.from_object(config_class)
+    # app.config.from_object(config_class)
     app.logger.setLevel(DEBUG)
 
     middleware = FlaskMiddleware(

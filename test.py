@@ -145,19 +145,6 @@
 
 import validators
 
+import uuid
 
-# import urllib.request
-url='https://microsoft-my.sharepoint.com/:w:/p/ryanferry/EeXUlRrL_llDh2YrAaJ6tjUBMOBEe20dchuVUXPtSKZ1Tg?e=aJnhKs'
-print(validators.url("http://google.com"))
-print(validators.url(url))
-print(validators.url("https://www.google.com"))
-# def check_valid_url(url):
-#     try:
-#         status_code = urllib.request.urlopen(url).getcode()
-#         website_is_up = status_code == 200
-#         return website_is_up
-#     except:
-#         return False
-    
-#
-# print(check_valid_url(url))
+print(new_uuid())

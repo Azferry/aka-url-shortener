@@ -26,13 +26,26 @@ import os
 # sys.path.insert(0, os.getcwd())
 
 def configure_logging(app):
-    pass
+    # Deactivate the default flask logger so that log messages don't get duplicated 
+    # from flask.logging import default_handler
+    # app.logger.removeHandler(default_handler)
+
+    logger = logging.getLogger(__name__)
+    az_appinsights_handler  = AzureLogHandler(connection_string=Config.APPINSIGHTS_CONNSTR)
+    
+    log_formatter = logging.Formatter('%(asctime)s %(levelname)s: %(message)s [in %(filename)s: %(lineno)d]')
+
+    # Apply the file formatter object to the file handler object
+    az_appinsights_handler.setFormatter(log_formatter)
+    logger.addHandler(az_appinsights_handler)
+    app.logger.setLevel(DEBUG)
+    return
 
 def create_app(config_class=Config):
     app = Flask(__name__)
-    logger = logging.getLogger(__name__)
-    logger.addHandler(AzureLogHandler(connection_string=Config.APPINSIGHTS_CONNSTR))
-    app.logger.setLevel(DEBUG)
+
+    configure_logging(app)
+    
     # app.config.from_object(config_class)
     
     app.logger.info("Initializing Application")

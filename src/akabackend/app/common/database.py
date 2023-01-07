@@ -3,22 +3,29 @@ from sqlalchemy import MetaData
 from app.common.snowflake import IdWorker
 import app.common.utils as utils
 from app.common.sqldb import domains, short_urls, sql_conn_helper
+from flask import current_app
+import logging
 from dotenv import load_dotenv
 import os
 from sqlalchemy.orm import sessionmaker
+# from application import application
 
 load_dotenv()
+log = logging.getLogger('app')
 
 SQL_DB_SERVER = os.getenv("SQL_DB_SERVER")
 SQL_DB01 = os.getenv("SQL_DB01")
 SQL_USER = os.getenv("SQL_USER")
 SQL_PWD = os.getenv("SQL_PWD")
+log.info("App Init - SQL Server Env - Server: {SQL_DB_SERVER}, DbName: {SQL_DB01}, User: {SQL_USER}")
 
 SNOW_FLAKE_DC_ID = os.getenv("DATACENTER_ID", "localhost")
 if os.getenv("HOST_TYPE", "localhost").lower() == "azwebapp":
     SNOW_FLAKE_INSTANCE_ID = os.getenv("WEBSITE_INSTANCE_ID")#, "localhost")
 else:
     SNOW_FLAKE_INSTANCE_ID = os.getenv("INSTANCE_ID", utils.new_uuid())
+
+log.info("App Init - SnowFlake Env - InstanceID: {SNOW_FLAKE_INSTANCE_ID}, DCID: {SNOW_FLAKE_DC_ID}")
 
 
 class sqldb_ops():

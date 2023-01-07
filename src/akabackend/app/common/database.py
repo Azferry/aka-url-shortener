@@ -1,12 +1,13 @@
 import datetime
 from sqlalchemy import MetaData
 from common.snowflake import IdWorker
+import common.utils as utils
 from common.sqldb import domains, short_urls, sql_conn_helper
-# from dotenv import load_dotenv
+from dotenv import load_dotenv
 import os
 from sqlalchemy.orm import sessionmaker
 
-# load_dotenv()
+load_dotenv()
 
 SQL_DB_SERVER = os.getenv("SQL_DB_SERVER")
 SQL_DB01 = os.getenv("SQL_DB01")
@@ -17,7 +18,7 @@ SNOW_FLAKE_DC_ID = os.getenv("DATACENTER_ID", "localhost")
 if os.getenv("HOST_TYPE", "localhost").lower() == "azwebapp":
     SNOW_FLAKE_INSTANCE_ID = os.getenv("WEBSITE_INSTANCE_ID")#, "localhost")
 else:
-    SNOW_FLAKE_INSTANCE_ID = os.getenv("INSTANCE_ID", "localhost")
+    SNOW_FLAKE_INSTANCE_ID = os.getenv("INSTANCE_ID", utils.new_uuid())
 
 
 class sqldb_ops():
@@ -28,7 +29,6 @@ class sqldb_ops():
         self.session = sessionmaker(bind=self.engine)
         self.worker = IdWorker(worker_id=SNOW_FLAKE_INSTANCE_ID, datacenter_id=SNOW_FLAKE_DC_ID, sequence=0)
         MetaData.reflect(self.meta)
-        self.delete_shorturl('ap')
 
     def insert_shorturl(self, long_url, sub_url):
         snow = self.worker.get_id()

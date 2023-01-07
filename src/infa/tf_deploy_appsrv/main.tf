@@ -40,9 +40,12 @@ module "webapps" {
     REDIS_HOST  = "@Microsoft.KeyVault(SecretUri=https://ntc-xas-akau-eus2-n-kv01.vault.azure.net/secrets/ntc-xas-akau-eus2-n-redis01-host)"
     REDIS_PORT = 6380
     REDIS_DEFAULT_TTL = 8000
+    WEBSITES_PORT = 8000
     BASE_URL = "aka.ntc.com"
     SCM_DO_BUILD_DURING_DEPLOYMENT = 1
-    WEBSITE_RUN_FROM_PACKAGE = 1
+    WEBSITES_CONTAINER_START_TIME_LIMIT = 1500
+    WEBSITE_RUN_FROM_PACKAGE = 0
+    # APPLICATIONINSIGHTS_CONNECTION_STRING
   }
   depends_on = [
     azurerm_resource_group.rg,

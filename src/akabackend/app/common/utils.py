@@ -1,4 +1,5 @@
 import validators
+import uuid
 
 def check_valid_url(url):
     """check_valid_url validates url
@@ -18,4 +19,6 @@ def check_valid_url(url):
         return False
     except:
         return False
-    
+
+def new_uuid():
+    return str(uuid.uuid4())

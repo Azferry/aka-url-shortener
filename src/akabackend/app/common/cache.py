@@ -1,9 +1,9 @@
 import redis
 from datetime import timedelta
 import os
-# from dotenv import load_dotenv
+from dotenv import load_dotenv
 
-# load_dotenv()
+load_dotenv()
 
 REDIS_DEFAULT_TTL = os.getenv("REDIS_DEFAULT_TTL",8000)
 REDIS_PORT = os.getenv("REDIS_PORT",6380)

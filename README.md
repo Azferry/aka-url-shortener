@@ -6,3 +6,5 @@ python -m venv venv
 venv\Scripts\activate
 
  source venv/bin/activate
+
+ gunicorn --bind 0.0.0.0 application:application

@@ -19,11 +19,13 @@ SQL_USER = os.getenv("SQL_USER")
 SQL_PWD = os.getenv("SQL_PWD")
 log.info(f"App Init - SQL Server Env - Server: {SQL_DB_SERVER}, DbName: {SQL_DB01}, User: {SQL_USER}")
 
-SNOW_FLAKE_DC_ID = os.getenv("DATACENTER_ID", "localhost")
+
 if os.getenv("HOST_TYPE", "localhost").lower() == "azwebapp":
     SNOW_FLAKE_INSTANCE_ID = os.getenv("WEBSITE_INSTANCE_ID")#, "localhost")
+    SNOW_FLAKE_DC_ID = os.getenv("REGION_NAME")
 else:
     SNOW_FLAKE_INSTANCE_ID = os.getenv("INSTANCE_ID", utils.new_uuid())
+    SNOW_FLAKE_DC_ID = os.getenv("DATACENTER_ID", "localhost")
 
 log.info(f"App Init - SnowFlake Env - InstanceID: {SNOW_FLAKE_INSTANCE_ID}, DCID: {SNOW_FLAKE_DC_ID}")
 

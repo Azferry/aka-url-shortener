@@ -1,16 +1,4 @@
 
-
-
-# from app import create_app
-
-
-# __version__ = "3.2"
-
-# if __name__ == '__main__':
-#     app = create_app()
-#     # app.run(host='0.0.0.0', port=8000)
-#     app.run()
-
 import logging
 from flask import Flask
 from config import Config, __version__
@@ -77,18 +65,3 @@ def create_app(config_class=Config):
     
 
     return app
-
-# if __name__ == '__main__':
-#     app = create_app()
-#     app.run()
-    # app = create_app()
-    # app.run()
-    # if app.config["HOST_TYPE"].lower() == "azwebapp":
-    #     app.run(host='0.0.0.0',port=5000)
-    # else:
-    #     PORT = int(os.getenv('PORT', 5000))
-    #     app.run(port=PORT, threaded=True)
-
-
-# To run Flask under uWSGI in a Docker environment, you must first add lazy-apps = true to the uWSGI configuration file 
-# (uwsgi.ini). For more information, see the issue description.

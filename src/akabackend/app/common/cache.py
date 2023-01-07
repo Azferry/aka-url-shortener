@@ -2,13 +2,16 @@ import redis
 from datetime import timedelta
 import os
 from dotenv import load_dotenv
+import logging
 
 load_dotenv()
+log = logging.getLogger('app')
 
 REDIS_DEFAULT_TTL = os.getenv("REDIS_DEFAULT_TTL",8000)
 REDIS_PORT = os.getenv("REDIS_PORT",6380)
 REDIS_HOST = os.getenv("REDIS_HOST","localhost")
 REDIS_PASS = os.getenv("REDIS_PASS")
+log.info(f"App Init - Redis Init - Server: {REDIS_HOST}, Msg Default TTL: {REDIS_DEFAULT_TTL}, port: {REDIS_PORT}")
 
 class cache():
     def __init__(self, db_id=0, rport=REDIS_PORT, rhost=REDIS_HOST, key_ttl=REDIS_DEFAULT_TTL, rpass=REDIS_PASS) -> None:

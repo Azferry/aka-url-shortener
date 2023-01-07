@@ -29,13 +29,14 @@ def configure_logging(app):
     pass
 
 def create_app(config_class=Config):
-    # init_db()
     app = Flask(__name__)
     logger = logging.getLogger(__name__)
     logger.addHandler(AzureLogHandler(connection_string=Config.APPINSIGHTS_CONNSTR))
-    
-    # app.config.from_object(config_class)
     app.logger.setLevel(DEBUG)
+    # app.config.from_object(config_class)
+    
+    app.logger.info("Initializing Application")
+    init_db()
 
     middleware = FlaskMiddleware(
         app,
@@ -58,7 +59,9 @@ def create_app(config_class=Config):
         return 'Hello World, Heart Beat - Root App'
 
     import app.api as api
+    app.logger.info("Initializing API Blueprints")
     api.init_app(app, version=__version__, title=Config.APP_TITLE)
+    
 
     return app
 

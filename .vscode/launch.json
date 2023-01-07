@@ -16,7 +16,7 @@
             "name": "Python: API",
             "type": "python",
             "request": "launch",
-            "program": "src/akabackend/app.py",
+            "program": "src/akabackend/application.py",
             "console": "integratedTerminal",
             "justMyCode": true
         },

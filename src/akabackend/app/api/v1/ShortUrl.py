@@ -1,5 +1,5 @@
 from flask import Blueprint, redirect
-from common.UrlOperations import UrlOperations
+from app.common.UrlOperations import UrlOperations
 app_name = __name__.split(".")[-1]
 app = Blueprint(app_name, app_name)
 

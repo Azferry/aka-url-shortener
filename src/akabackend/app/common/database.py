@@ -1,8 +1,8 @@
 import datetime
 from sqlalchemy import MetaData
-from common.snowflake import IdWorker
-import common.utils as utils
-from common.sqldb import domains, short_urls, sql_conn_helper
+from app.common.snowflake import IdWorker
+import app.common.utils as utils
+from app.common.sqldb import domains, short_urls, sql_conn_helper
 from dotenv import load_dotenv
 import os
 from sqlalchemy.orm import sessionmaker

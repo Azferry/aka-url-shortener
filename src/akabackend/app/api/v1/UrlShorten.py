@@ -1,6 +1,8 @@
 from flask import abort, Blueprint, jsonify, request
 from app.common.UrlOperations import UrlOperations
 from app.common.metrics import mmap, short_url_cr_measure,vanity_url_cr_measure, tmap
+import logging
+log = logging.getLogger('app')
 app_name = __name__.split(".")[-1]
 app = Blueprint(app_name, app_name)
 

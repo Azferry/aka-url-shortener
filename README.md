@@ -7,4 +7,4 @@ venv\Scripts\activate
 
  source venv/bin/activate
 
- gunicorn --bind 0.0.0.0 application:application
+gunicorn --bind 0.0.0.0 --workers $((($NUM_CORES*2)+1)) application:application

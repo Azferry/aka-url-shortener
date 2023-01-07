@@ -13,6 +13,7 @@ import sys
 import os
 # sys.path.insert(0, os.getcwd())
 
+
 def configure_logging(app):
     # Deactivate the default flask logger so that log messages don't get duplicated 
     # from flask.logging import default_handler
@@ -33,7 +34,6 @@ def create_app(config_class=Config):
     app = Flask(__name__)
 
     configure_logging(app)
-    
     # app.config.from_object(config_class)
     
     app.logger.info("Initializing Application")
@@ -55,7 +55,7 @@ def create_app(config_class=Config):
 
     middleware.exporter.add_telemetry_processor(callback_function)
 
-    @app.route('/')
+    @app.route('/heartbeat')
     def heart_beat():
         return 'Hello World, Heart Beat - Root App'
 

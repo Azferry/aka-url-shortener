@@ -58,6 +58,9 @@ def create_app(config_class=Config):
     @app.route('/heartbeat')
     def heart_beat():
         return 'Hello World, Heart Beat - Root App'
+    @app.route('/robots933456.txt')
+    def appsrv_catch():
+        return 'robots933456.txt'
 
     import app.api as api
     app.logger.info("Initializing API Blueprints")

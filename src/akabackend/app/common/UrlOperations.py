@@ -29,9 +29,9 @@ class UrlOperations():
         longurl = lu
         if lu == None:
             lu = self.db_ops.get_longurl(sub_url)
-            longurl = lu.long_url
             if lu == None:
                 return None
+            longurl = lu.long_url
             self.url_cache.insert(sub_url, lu.long_url)
         if ("https://" or "http://") in longurl:
             return longurl

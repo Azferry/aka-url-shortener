@@ -58,8 +58,15 @@ def create_app(config_class=Config):
     @app.route('/heartbeat')
     def heart_beat():
         return 'Hello World, Heart Beat - Root App'
+
     @app.route('/robots933456.txt')
     def appsrv_catch():
+        """appsrv_catch is a dummy URL path that App Service uses to check if the container is serving requests.
+        Catches the response to stop exceptions in application insights
+        https://github.com/MicrosoftDocs/azure-docs/blob/main/includes/app-service-web-configure-robots933456.md
+        Returns:
+            string: robots933456.txt
+        """
         return 'robots933456.txt'
 
     import app.api as api

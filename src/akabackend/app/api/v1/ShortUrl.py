@@ -9,5 +9,5 @@ def baseRedirect(shortcode):
     urlOps = UrlOperations()
     ul = urlOps.getLongUrl(shortcode)
     if ul == None:
-        return
+        return "URL Does not exist"
     return redirect(ul)

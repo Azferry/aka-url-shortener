@@ -16,7 +16,7 @@ def appsrv_catch():
     Catches the response to stop exceptions in application insights
     https://github.com/MicrosoftDocs/azure-docs/blob/main/includes/app-service-web-configure-robots933456.md
     Returns:
-        string: robots933456.txt
+        str: robots933456.txt
     """
     return 'robots933456.txt'
 

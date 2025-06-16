@@ -76,38 +76,53 @@ resource "azurerm_monitor_diagnostic_setting" "sqlDiag" {
       enabled = false
     }
   }
+  metric {
+    category = "InstanceAndAppAdvanced"
+
+    retention_policy {
+      enabled = false
+    }
+  }
+  metric {
+    category = "WorkloadManagement"
+
+    retention_policy {
+      enabled = false
+    }
+  }
+  
   lifecycle {
     ignore_changes = [
-      logs, metric
+       log,metric
     ]
   }
 }
 
-# resource "azurerm_monitor_diagnostic_setting" "redisDiag" {
-#     for_each = azurerm_redis_cache.redis
-#   name               = "la_diag_settings"
-#   target_resource_id = each.value.id#azurerm_mssql_server.sql.id
-#   log_analytics_workspace_id = module.shared_services.log_workspace_id
+resource "azurerm_monitor_diagnostic_setting" "redisDiag" {
+    for_each = azurerm_redis_cache.redis
+  name               = "la_diag_settings"
+  target_resource_id = each.value.id#azurerm_mssql_server.sql.id
+  log_analytics_workspace_id = module.shared_services.log_workspace_id
 
-#   log {
-#     category = "allLogs"
+  log {
+    category = "ConnectedClientList"
 
-#     retention_policy {
-#       enabled = false
-#     }
-#   }
+    retention_policy {
+      enabled = false
+    }
+  }
 
 
-#   metric {
-#     category = "AllMetrics"
+  metric {
+    category = "AllMetrics"
 
-#     retention_policy {
-#       enabled = false
-#     }
-#   }
-#   lifecycle {
-#     ignore_changes = [
-#       log, metric
-#     ]
-#   }
-# }
+    retention_policy {
+      enabled = false
+    }
+  }
+  lifecycle {
+    ignore_changes = [
+     log, metric
+    ]
+  }
+}

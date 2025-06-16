@@ -1,0 +1,5 @@
+curl -X GET http://ntc-xas-akau-eus2-n-wa01-api.azurewebsites.net/v1/shorten/27af82
+
+curl -X GET http://ntc-xas-akau-eus2-n-wa01-api.azurewebsites.net/heartbeat
+
+curl -X POST 'http://ntc-xas-akau-eus2-n-wa01-api.azurewebsites.net/v1/shorten?longurl=https://www.amazon.com' --header 'Content-Type: application/json'

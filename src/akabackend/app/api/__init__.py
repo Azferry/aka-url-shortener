@@ -2,7 +2,6 @@ import importlib
 import os
 from flask import jsonify, request
 
-# from . import swagger
 # from .v1 import auth_token
 
 def blueprint_loader(app, module, ignore=[], bp_name='app', parent=__name__):

@@ -13,6 +13,7 @@ resource "azurerm_linux_web_app" "wa" {
   service_plan_id     = azurerm_service_plan.wa.id
 
   site_config {
+    health_check_path = "/heartbeat"
     app_command_line = "gunicorn --bind 0.0.0.0 --workers $((($NUM_CORES*2)+1)) application:application"
     application_stack {
       python_version = "3.10"

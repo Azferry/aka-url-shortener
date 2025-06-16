@@ -22,6 +22,22 @@ variable "network_type" {
   type = string
 }
 
+variable "virtual_networks" {
+  type = object({
+    vnets = list(object({
+      enabled  = bool
+      series   = string
+      location = string
+      address_prefix = list(string)
+      subnets = list(object({
+        name           = string
+        address_prefix = string
+        })
+      )
+    }))
+  })
+}
+
 variable "api_webapps" {
   type = object({
     python_version = string

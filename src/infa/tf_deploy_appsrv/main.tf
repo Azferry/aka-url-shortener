@@ -31,7 +31,9 @@ module "webapps" {
   app_settings = {
     HOST_TYPE = "AzWebApp"
     DATACENTER_ID = "WUS2"
-    APPINSIGHTS_CONNSTR = "@Microsoft.KeyVault(SecretUri=https://ntc-xas-akau-eus2-n-kv01.vault.azure.net/secrets/application-insights-connstr)" 
+    WEBSITE_HEALTHCHECK_MAXPINGFAILURES = 10
+    APPINSIGHTS_INSTRUMENTATIONKEY = "1f0ea915-baa5-4454-bb55-f8b779c9d9e0"
+    APPLICATIONINSIGHTS_CONNECTION_STRING = "@Microsoft.KeyVault(SecretUri=https://ntc-xas-akau-eus2-n-kv01.vault.azure.net/secrets/application-insights-connstr)" 
     SQL_PWD = "@Microsoft.KeyVault(SecretUri=https://ntc-xas-akau-eus2-n-kv01.vault.azure.net/secrets/ntc-xas-akau-eus2-n-sql01-pw)"   
     SQL_DB_SERVER = "ntc-xas-akau-eus2-n-sql01.database.windows.net"
     SQL_DB01 = "shorturl-eus2-sqldb01"
